@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .completed {
+        text-decoration: line-through;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Todo List</h1>
+      <input type="text" v-model="newInput" v-on:keypress.enter="createTodo" />
+      <!-- v-on:이벤트="함수" 이벤트리스너와 비슷 -->
+      <button v-on:click="createTodo">추가</button>
+      <ul>
+        <!-- directive : vue에게 지시하는 명령어
+        v-for: 배열에게 순회를 요청하는 명령어
+        todos를 넣은 todo를 순회하며 {{todo}}에 표시
+        v-if: 조건문 명령어, todo의 isCompleted가 false인 값만 표시
+        v-else: v-if와 매칭되는 조건문 -->
+        <!-- v-bind: 완료된 경우 특정한 스타일이 가능하도록 변경 
+        v-bind:class="{조건부로 적용할 클래스 이름: boolean값}"  -->
+        <li v-bind:class="{completed: todo.isCompleted}" v-for="todo in todos">
+          <input v-model="todo.isCompleted" type="checkbox" />
+          {{ todo.content}}
+        </li>
+      </ul>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          name: "Kang",
+          newInput: "",
+          //배열로 표현
+          todos: [
+            { content: "Vue JS 복습", isCompleted: false },
+            { content: "JS 복습", isCompleted: true },
+            { content: "코딩테스트 준비", isCompleted: false },
+            { content: "Node JS 복습", isCompleted: false },
+          ],
+        },
+        methods: {
+          createTodo() {
+            // newInput의 값을 todos로 넣음, this키워드를 통해 접근
+            this.todos.push({ content: this.newInput, isCompleted: false });
+            this.newInput = "";
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
