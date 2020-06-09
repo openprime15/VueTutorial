@@ -13,6 +13,11 @@
   <body>
     <div id="app">
       <h1>Todo List</h1>
+      <select v-model="status">
+        <option value="showAll">모두보기</option>
+        <option value="showCompleted">완료된 것만 보기</option>
+        <option value="showIncomplete">미완료된 것만 보기</option>
+      </select>
       <input type="text" v-model="newInput" v-on:keypress.enter="createTodo" />
       <!-- v-on:이벤트="함수" 이벤트리스너와 비슷 -->
       <button v-on:click="createTodo">추가</button>
@@ -24,18 +29,30 @@
         v-else: v-if와 매칭되는 조건문 -->
         <!-- v-bind: 완료된 경우 특정한 스타일이 가능하도록 변경 
         v-bind:class="{조건부로 적용할 클래스 이름: boolean값}"  -->
-        <li v-bind:class="{completed: todo.isCompleted}" v-for="todo in todos">
+        <li
+          v-bind:class="{completed: todo.isCompleted}"
+          v-for="todo in todosByStatus"
+        >
           <input v-model="todo.isCompleted" type="checkbox" />
           {{ todo.content}}
         </li>
       </ul>
+      <button v-on:click="clearCompleted">완료된 할일 지우기</button>
+      <!-- <div v-if="visible">
+        <h1>Computed vs Method 비교</h1>
+        <p>computed: {{ computedDate}}</p>
+        <p>method: {{ methodDate()}}</p>
+      </div>
+      <button v-on:click="visible = !visible">리로드</button> -->
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script>
-      new Vue({
+      const app = new Vue({
         el: "#app",
         data: {
+          visible: true,
           name: "Kang",
+          status: "showAll", // showCompleted, showIncomplete
           newInput: "",
           //배열로 표현
           todos: [
@@ -45,11 +62,48 @@
             { content: "Node JS 복습", isCompleted: false },
           ],
         },
+        computed: {
+          //특정한 데이터를 반복해서 부르면 캐싱함
+          // 함수처럼 보이지만 값처럼 쓰임
+          // 최적화를 위해 computed에 배치
+          todosByStatus() {
+            // status = 'showAll' 이면 todos다 보여주면됨
+            // status = showCompleted 이면 조건 시작
+            if (this.status === "showCompleted") {
+              return this.todos.filter((todo) => todo.isCompleted);
+            }
+            // status = showIncomplete 인 경우
+            if (this.status === "showIncomplete") {
+              return this.todos.filter((todo) => !todo.isCompleted);
+            }
+            return this.todos;
+          },
+          // computedDate() {
+          //   return new Date();
+          // },
+        },
         methods: {
+          // methodDate() {
+          //   return new Date();
+          // },
           createTodo() {
-            // newInput의 값을 todos로 넣음, this키워드를 통해 접근
-            this.todos.push({ content: this.newInput, isCompleted: false });
-            this.newInput = "";
+            //입력값이 있을 때만 가능하도록 조건문 입력
+            if (this.newInput) {
+              // newInput의 값을 todos로 넣음, this키워드를 통해 접근
+              this.todos.push({ content: this.newInput, isCompleted: false });
+              this.newInput = "";
+            } else {
+              alert("내용을 입력해주세요.");
+            }
+          },
+          clearCompleted() {
+            // 배열의 helper문 forEach, map, reduce, some, ....
+            // 배열을 한번씩 순회하며, 무언가를 하는거
+            // 무언가 => 함수(콜백)
+            // helper문은 배열의 본질을 변화시키지 않기 때문에 다시 원값에 담아야한다.
+            this.todos = this.todos.filter((todo) => {
+              return !todo.isCompleted;
+            });
           },
         },
       });

@@ -31,7 +31,7 @@ Model-View-ViewModel: Model이 바뀌면 View가 바뀌도록 ViewModel이 자�
 ### 1. Directive(지시자)
 
 - 'v-for' : 배열과 같은 데이터를 순회
-- 'v-if' : 조건부 렌더링
+- 'v-if' : 조건부 렌더링, 조건에 따라 보이고 안보이고 여부를 결정
 - 'v-else : 조건부 렌더링
 - 'v-on' : 이벤트 바인딩('addEventListener()')
 - 'v-model' : 양방향 데이터 바인딩
