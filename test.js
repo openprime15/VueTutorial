@@ -1,24 +1,14 @@
-let n = 100;
-let a = [];
-let answer = 0;
-
-for (let i = 2; i <= n; i++) {
-  a[i] = true;
-}
-
-for (let i = 2; i <= n; i++) {
-  if (!a[i]) {
-    continue;
-  }
-  for (let j = i * 2; j <= n; j += i) {
-    a[j] = false;
+function solution(s) {
+  console.log(s.length);
+  console.log(s.charAt(0));
+  console.log(s.indexOf(" "));
+  for (i = 0; i < s.indexOf(" "); i++) {
+    if (i % 2 === 0) {
+      s.charAt(i).toUpperCase();
+    } else {
+      s.charAt(i).toLowerCase();
+    }
   }
 }
 
-for (let i = 2; i <= n; i++) {
-  if (a[i]) {
-    console.log(i);
-    answer++;
-  }
-}
-console.log(answer);
+solution("try hello world");
